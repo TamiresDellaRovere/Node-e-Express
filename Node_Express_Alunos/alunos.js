@@ -1,10 +1,8 @@
-
 /*
     1-)
     Crie um módulo alunos.js que exporta um array de alunos,
     uma função que filtra pelo nome e uma que filtra pela média (maior ou igual).
 */
-
 const alunos = [
     { nome: "Tamires", media: "9.2" },
     { nome: "Jessica", media: "10" },
