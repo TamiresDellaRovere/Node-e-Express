@@ -5,7 +5,6 @@ const app = express()
 app.use(express.json());
 
 
-const alunos = require("./alunos");
 
 /*
     2-)
@@ -15,6 +14,7 @@ const alunos = require("./alunos");
     “/alunos?media=7.5” ou esse “/alunos”. 
     Esta rota deve utilizar as funções exportadas pelo módulo alunos.js;
 */
+const alunos = require("./alunos");
 app.get('/alunos', (req, res) => {
     const nome = req.query.nome;
     const media = parseFloat(req.query.media);
@@ -52,6 +52,7 @@ app.get('/alunos', (req, res) => {
 */
 app.post('/alunos/novo', (req, res) => {
     const { nome, matricula, media } = req.body;
+    // console.log(req.body);
 
     if (!nome || !matricula || !media) {
         return res.status(400).send("Erro: Campos inválidos.");
@@ -78,6 +79,56 @@ app.post('/alunos/novo', (req, res) => {
     Crie uma rota POST para “/alunos/deletar/:index” que indica qual aluno remover do array de dados (index). 
     Trate a chamada se o aluno não existir (404);
 */
+app.post('/alunos/deletar/:index', (req, res) => {
+    const index = parseInt(req.params.index);
+    // console.log(req.params.index);
+
+    if (isNaN(index)) {
+        return res.status(400).send("Erro: índice inválido.");
+    }
+
+    if (index < 0 || index >= alunos.length) {
+        return res.status(404).send("Erro: Aluno não encontrado.");
+    }
+
+    const alunoRemovido = alunos.splice(index, 1)[0];
+    return res.json(alunoRemovido);
+});
+
+
+
+
+/*
+    5-)
+    Crie uma rota POST para /alunos/atualizar/:index, 
+    que no corpo da requisição recebe um objeto (nome, média) e atualiza os dados do aluno naquela posição.
+    Trate a chamada se o aluno não existir (404);
+*/
+app.post('/alunos/atualizar/:index', (req, res) => {
+    const index = parseInt(req.params.index);
+    const { nome, media } = req.body;
+    console.log(req.body);
+
+    if (isNaN(index)) {
+        return res.status(400).send("Erro: índice inválido.");
+    }
+
+    if (index < 0 || index >= alunos.length) {
+        return res.status(404).send("Erro: Aluno não encontrado.");
+    }
+
+    const alunoAtualizado = {
+        nome: nome ? nome : alunos[index].nome,
+        media: media ? parseFloat(media) : parseFloat(alunos[index].media)
+    };
+
+    alunos[index] = alunoAtualizado;
+    return res.json(alunoAtualizado);
+});
+
+
+
+
 
 
 app.listen(3000, () => {
