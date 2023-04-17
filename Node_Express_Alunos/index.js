@@ -107,7 +107,7 @@ app.post('/alunos/deletar/:index', (req, res) => {
 app.post('/alunos/atualizar/:index', (req, res) => {
     const index = parseInt(req.params.index);
     const { nome, media } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
 
     if (isNaN(index)) {
         return res.status(400).send("Erro: índice inválido.");
